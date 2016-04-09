@@ -3,6 +3,7 @@
 ;; Copyright (C) 2016  Chunyang Xu
 
 ;; Author: Chunyang Xu <xuchunyang.me@gmail.com>
+;; URL: https://github.com/xuchunyang/helm-notmuch
 ;; Keywords: mail
 ;; Version: 0.01
 ;; Package-Requires: ((helm "1.9.3") (notmuch "0.21"))
@@ -31,7 +32,8 @@
 (require 'notmuch)
 
 (defun helm-notmuch-init ()
-  (let ((proc (start-process "helm-notmuch" helm-buffer "notmuch" "search" helm-pattern)))
+  (let ((proc (start-process "helm-notmuch" helm-buffer
+                             "notmuch" "search" helm-pattern)))
     (prog1 proc
       (set-process-sentinel proc #'ignore))))
 
