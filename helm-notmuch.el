@@ -35,18 +35,22 @@
     (prog1 proc
       (set-process-sentinel proc #'ignore))))
 
-(defun helm-notmuch-show-email (candidate)
-  (let ((thread-id
-         (progn (string-match "^\\(thread:[0-9]+\\) " candidate)
-                (match-string 1 candidate))))
-    (notmuch-show thread-id)))
+(defconst helm-notmuch-thread-id-length (length "thread:0000000000000028"))
+
+(defun helm-notmuch-candidates-formatter (candidates)
+  ;; Remove thread-id
+  (mapcar (lambda (cand)
+            (cons (substring cand (+ 2 helm-notmuch-thread-id-length))
+                  (substring cand 0 helm-notmuch-thread-id-length)))
+          candidates))
 
 (defvar helm-source-notmuch
   (helm-build-async-source "Search email with notmuch"
     :candidates-process #'helm-notmuch-init
+    :candidate-transformer #'helm-notmuch-candidates-formatter
     :requires-pattern 2
     :nohighlight t
-    :action '(("Show message in notmuch" . helm-notmuch-show-email))))
+    :action '(("Show message in notmuch" . notmuch-show))))
 
 ;;;###autoload
 (defun helm-notmuch ()
