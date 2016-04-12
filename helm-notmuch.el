@@ -5,7 +5,7 @@
 ;; Author: Chunyang Xu <xuchunyang.me@gmail.com>
 ;; URL: https://github.com/xuchunyang/helm-notmuch
 ;; Keywords: mail
-;; Version: 0.01
+;; Version: 0.02
 ;; Package-Requires: ((helm "1.9.3") (notmuch "0.21"))
 
 ;; This program is free software; you can redistribute it and/or modify
