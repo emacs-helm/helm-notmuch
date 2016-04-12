@@ -35,7 +35,26 @@
   (let ((proc (start-process "helm-notmuch" helm-buffer
                              "notmuch" "search" helm-pattern)))
     (prog1 proc
-      (set-process-sentinel proc #'ignore))))
+      (set-process-sentinel
+       proc
+       (lambda (process event)
+         (cond
+          ((= 1 (process-exit-status process))
+           (with-helm-buffer
+             (setq mode-line-format
+                   '(" " mode-line-buffer-identification " "
+                     "[notmuch process finished - (no results)]"))
+             (force-mode-line-update)))
+          ((string= "finished\n" event)
+           (with-helm-buffer
+             (setq mode-line-format
+                   '(" " mode-line-buffer-identification " "
+                     (:eval (format "L%s" (helm-candidate-number-at-point)))
+                     " "
+                     (:eval (format
+                             "[notmuch process finished - (%s results)]"
+                             (helm-get-candidate-number)))))
+             (force-mode-line-update)))))))))
 
 (defconst helm-notmuch-thread-id-length (length "thread:0000000000000028"))
 
