@@ -40,11 +40,14 @@
 (defconst helm-notmuch-thread-id-length (length "thread:0000000000000028"))
 
 (defun helm-notmuch-candidates-formatter (candidates)
-  ;; Remove thread-id
-  (mapcar (lambda (cand)
-            (cons (substring cand (+ 2 helm-notmuch-thread-id-length))
-                  (substring cand 0 helm-notmuch-thread-id-length)))
-          candidates))
+  (if (and (stringp (car candidates))
+           (string-prefix-p "thread:" (car candidates)))
+      ;; Remove leading thread-id
+      (mapcar (lambda (cand)
+                (cons (substring cand (+ 2 helm-notmuch-thread-id-length))
+                      (substring cand 0 helm-notmuch-thread-id-length)))
+              candidates)
+    candidates))
 
 (defvar helm-source-notmuch
   (helm-build-async-source "Search email with notmuch"
