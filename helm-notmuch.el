@@ -31,7 +31,7 @@
 (require 'helm)
 (require 'notmuch)
 
-(defun helm-notmuch-init ()
+(defun helm-notmuch-collect-candidates ()
   (let ((proc (start-process "helm-notmuch" helm-buffer
                              "notmuch" "search" helm-pattern)))
     (prog1 proc
@@ -62,6 +62,7 @@
   (if (and (stringp (car candidates))
            (string-prefix-p "thread:" (car candidates)))
       ;; Remove leading thread-id
+      ;; TODO: fold too long line...
       (mapcar (lambda (cand)
                 (cons (substring cand (+ 2 helm-notmuch-thread-id-length))
                       (substring cand 0 helm-notmuch-thread-id-length)))
@@ -70,8 +71,12 @@
 
 (defvar helm-source-notmuch
   (helm-build-async-source "Search email with notmuch"
-    :candidates-process #'helm-notmuch-init
+    :candidates-process #'helm-notmuch-collect-candidates
     :candidate-transformer #'helm-notmuch-candidates-formatter
+    ;; TODO: What if I want to a single character? for example, '*' for matching
+    ;; all emails. But notmuch (actually Xapian) has more serious limitation:
+    ;; not working with CJK text, for example, I can't just use my last name '徐'
+    ;; (or first name '春阳') to search emails which contain my name.
     :requires-pattern 2
     :nohighlight t
     :action '(("Show message in notmuch" . notmuch-show))))
