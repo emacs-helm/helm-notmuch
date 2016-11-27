@@ -38,9 +38,24 @@ If this variable is non-nil, include results with words for which
 the last word of the input is a prefix. Note that this (slightly)
 slows down searches.")
 
+(defgroup helm-notmuch nil
+  "Helm interface for notmuch."
+  :group 'notmuch
+  :link '(url-link :tag "Homepage" "https://github.com/xuchunyang/helm-notmuch"))
+
+(defcustom helm-notmuch-max-matches 0
+  "Maximum number of matches shown.
+Notice that a setting of 0 means \"Show all matches\"."
+  :group 'helm-notmuch
+  :type '(choice (const :tag "Show all matches" 0)
+                 (integer :tag "Maximum number of matches shown" 50)))
+
 (defun helm-notmuch-collect-candidates ()
-  (let ((proc (start-process "helm-notmuch" helm-buffer
-                             "notmuch" "search" helm-pattern)))
+  (let* ((cmds (delq nil (list "notmuch" "search"
+                               (and (> helm-notmuch-max-matches 0)
+                                    (concat "--limit=" (number-to-string helm-notmuch-max-matches)))
+                               helm-pattern)))
+         (proc (apply 'start-process "helm-notmuch" helm-buffer cmds)))
     (prog1 proc
       (set-process-sentinel
        proc
