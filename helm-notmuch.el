@@ -31,6 +31,13 @@
 (require 'helm)
 (require 'notmuch)
 
+(defcustom helm-notmuch-match-incomplete-words nil
+  "If non-nil, treat last word in query as incomplete.
+
+If this variable is non-nil, include results with words for which
+the last word of the input is a prefix. Note that this (slightly)
+slows down searches.")
+
 (defun helm-notmuch-collect-candidates ()
   (let ((proc (start-process "helm-notmuch" helm-buffer
                              "notmuch" "search" helm-pattern)))
@@ -69,6 +76,13 @@
               candidates)
     candidates))
 
+(defun helm-notmuch-maybe-match-incomplete (pattern)
+  (if helm-notmuch-match-incomplete-words
+      (if (string-match-p "[:alnum:]$" pattern)
+          (concat pattern "*")
+        pattern)
+    pattern))
+
 (defvar helm-source-notmuch
   (helm-build-async-source "Search email with notmuch"
     :candidates-process #'helm-notmuch-collect-candidates
@@ -78,6 +92,7 @@
     ;; not working with CJK text, for example, I can't just use my last name '徐'
     ;; (or first name '春阳') to search emails which contain my name.
     :requires-pattern 2
+    :pattern-transformer #'helm-notmuch-maybe-match-incomplete
     :nohighlight t
     :action '(("Show message in notmuch" . notmuch-show))))
 
