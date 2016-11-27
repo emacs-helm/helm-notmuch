@@ -31,9 +31,14 @@
 (require 'helm)
 (require 'notmuch)
 
+(defcustom helm-notmuch-max-matches 50
+  "Maximum number of matches shown.")
+
 (defun helm-notmuch-collect-candidates ()
   (let ((proc (start-process "helm-notmuch" helm-buffer
-                             "notmuch" "search" helm-pattern)))
+                             "notmuch" "search"
+                             (concat "--limit=" (number-to-string helm-notmuch-max-matches))
+                             helm-pattern)))
     (prog1 proc
       (set-process-sentinel
        proc
