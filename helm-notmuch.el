@@ -2,10 +2,10 @@
 
 ;; Copyright (C) 2016  Chunyang Xu
 
-;; Author: Chunyang Xu <xuchunyang.me@gmail.com>
+;; Author: Chunyang Xu <mail@xuchunyang.me>
 ;; URL: https://github.com/xuchunyang/helm-notmuch
 ;; Keywords: mail
-;; Version: 0.02
+;; Version: 1.0
 ;; Package-Requires: ((helm "1.9.3") (notmuch "0.21"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,9 @@
 
 ;; To use, type M-x helm-notmuch.  helm-notmuch will gets start to search when
 ;; length of your input is no less than 2.
+
+;; News:
+;; - 2016-11-28 v1.0 Add two user options: `helm-notmuch-max-matches' and `helm-notmuch-match-incomplete-words'
 
 ;;; Code:
 
