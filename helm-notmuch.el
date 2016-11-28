@@ -31,13 +31,6 @@
 (require 'helm)
 (require 'notmuch)
 
-(defcustom helm-notmuch-match-incomplete-words nil
-  "If non-nil, treat last word in query as incomplete.
-
-If this variable is non-nil, include results with words for which
-the last word of the input is a prefix. Note that this (slightly)
-slows down searches.")
-
 (defgroup helm-notmuch nil
   "Helm interface for notmuch."
   :group 'notmuch
@@ -49,6 +42,15 @@ Notice that a setting of 0 means \"Show all matches\"."
   :group 'helm-notmuch
   :type '(choice (const :tag "Show all matches" 0)
                  (integer :tag "Maximum number of matches shown" 50)))
+
+(defcustom helm-notmuch-match-incomplete-words nil
+  "If non-nil, treat last word in query as incomplete.
+
+If this variable is non-nil, include results with words for which
+the last word of the input is a prefix. Note that this (slightly)
+slows down searches."
+  :group 'helm-notmuch
+  :type 'boolean)
 
 (defun helm-notmuch-collect-candidates ()
   (let* ((cmds (delq nil (list "notmuch" "search"
