@@ -98,7 +98,7 @@ slows down searches."
 
 (defun helm-notmuch-maybe-match-incomplete (pattern)
   (if helm-notmuch-match-incomplete-words
-      (if (string-match-p "[:alnum:]$" pattern)
+      (if (string-match-p "[[:alnum:]]$" pattern)
           (concat pattern "*")
         pattern)
     pattern))
