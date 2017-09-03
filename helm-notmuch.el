@@ -56,7 +56,7 @@ slows down searches."
   :type 'boolean)
 
 (defun helm-notmuch-collect-candidates ()
-  (let* ((cmds (delq nil (list "notmuch" "search"
+  (let* ((cmds (delq nil (list notmuch-command "search"
                                (and (> helm-notmuch-max-matches 0)
                                     (concat "--limit=" (number-to-string helm-notmuch-max-matches)))
                                helm-pattern)))
