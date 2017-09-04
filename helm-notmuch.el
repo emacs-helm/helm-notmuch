@@ -1,11 +1,11 @@
 ;;; helm-notmuch.el --- Search emails with Notmuch and Helm  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Chunyang Xu
+;; Copyright (C) 2016-2017  Chunyang Xu
 
 ;; Author: Chunyang Xu <mail@xuchunyang.me>
 ;; URL: https://github.com/xuchunyang/helm-notmuch
 ;; Keywords: mail
-;; Version: 1.0
+;; Version: 1.1
 ;; Package-Requires: ((helm "1.9.3") (notmuch "0.21"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,7 @@
 ;; length of your input is no less than 2.
 
 ;; News:
+;; - 2017-09-04 v1.1 Fix a regexp bug and use `notmuch-command' instead of hardcode "notmuch"
 ;; - 2016-11-28 v1.0 Add two user options: `helm-notmuch-max-matches' and `helm-notmuch-match-incomplete-words'
 
 ;;; Code:
