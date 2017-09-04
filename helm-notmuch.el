@@ -108,10 +108,6 @@ slows down searches."
   (helm-build-async-source "Search email with notmuch"
     :candidates-process #'helm-notmuch-collect-candidates
     :candidate-transformer #'helm-notmuch-candidates-formatter
-    ;; TODO: What if I want to a single character? for example, '*' for matching
-    ;; all emails. But notmuch (actually Xapian) has more serious limitation:
-    ;; not working with CJK text, for example, I can't just use my last name '徐'
-    ;; (or first name '春阳') to search emails which contain my name.
     :requires-pattern 2
     :pattern-transformer #'helm-notmuch-maybe-match-incomplete
     :nohighlight t
