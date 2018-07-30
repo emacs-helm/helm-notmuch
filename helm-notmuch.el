@@ -159,6 +159,12 @@ slows down searches."
   (notmuch-show candidate nil nil
                 (helm-notmuch-maybe-match-incomplete helm-pattern)))
 
+(defun helm-notmuch-search (candidate)
+  "Display notmuch query in notmuch-search buffer, highlighting CANDIDATE."
+  (notmuch-search (helm-notmuch-maybe-match-incomplete helm-pattern)
+                  nil
+                  (replace-regexp-in-string "^thread:" "" candidate)))
+
 (defvar helm-source-notmuch
   (helm-build-async-source "Search email with notmuch"
     :candidates-process #'helm-notmuch-collect-candidates
@@ -166,7 +172,8 @@ slows down searches."
     :requires-pattern 2
     :pattern-transformer #'helm-notmuch-maybe-match-incomplete
     :nohighlight t
-    :action '(("Show message in notmuch" . helm-notmuch-show))))
+    :action '(("Show message in notmuch" . helm-notmuch-show)
+              ("Open notmuch-search query buffer" . helm-notmuch-search))))
 
 ;;;###autoload
 (defun helm-notmuch ()
