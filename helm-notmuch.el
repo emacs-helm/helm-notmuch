@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016-2017  Chunyang Xu
 
 ;; Author: Chunyang Xu <mail@xuchunyang.me>
-;; URL: https://github.com/xuchunyang/helm-notmuch
+;; URL: https://github.com/emacs-helm/helm-notmuch
 ;; Keywords: mail
 ;; Version: 1.1
 ;; Package-Requires: ((helm "1.9.3") (notmuch "0.21"))
