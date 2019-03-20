@@ -1,6 +1,7 @@
 ;;; helm-notmuch.el --- Search emails with Notmuch and Helm  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016-2017  Chunyang Xu
+;; Copyright (C) 2019  Pierre Neidhardt <mail@ambrevar.xyz>
 
 ;; Author: Chunyang Xu <mail@xuchunyang.me>
 ;; URL: https://github.com/emacs-helm/helm-notmuch
@@ -161,7 +162,8 @@ slows down searches."
 
 (defun helm-notmuch-search (candidate)
   "Display notmuch query in notmuch-search buffer, highlighting CANDIDATE."
-  (notmuch-search (helm-notmuch-maybe-match-incomplete helm-pattern)
+  (notmuch-search (helm-notmuch-maybe-match-incomplete
+                   (with-helm-buffer helm-input-local))
                   nil
                   (replace-regexp-in-string "^thread:" "" candidate)))
 
