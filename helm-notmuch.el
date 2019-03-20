@@ -155,10 +155,15 @@ slows down searches."
         pattern)
     pattern))
 
-(defun helm-notmuch-show (candidate)
-  "Display CANDIDATE using notmuch-show, retaining the query context."
-  (notmuch-show candidate nil nil
-                (helm-notmuch-maybe-match-incomplete helm-pattern)))
+(defun helm-notmuch-show (_candidate)
+  "Display marked candidates using `notmuch-show', retaining the query context."
+  (helm-window-show-buffers
+   (save-window-excursion
+     (cl-loop for candidate in (helm-marked-candidates)
+              collect (progn (notmuch-show candidate nil nil
+                                           (helm-notmuch-maybe-match-incomplete
+                                            helm-pattern))
+                             (current-buffer))))))
 
 (defun helm-notmuch-search (candidate)
   "Display notmuch query in notmuch-search buffer, highlighting CANDIDATE."
