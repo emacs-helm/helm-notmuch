@@ -99,54 +99,57 @@ slows down searches."
 
 (defun helm-notmuch-candidate-formatter (cand)
   "Format the single entry CAND."
-  (let ((text (substring cand (+ 2 helm-notmuch-thread-id-length)))
-        (id (substring cand 0 helm-notmuch-thread-id-length))
-        cstart astart alen tstart tags)
-    (with-temp-buffer
-      (insert text)
-      (goto-char (point-min))
+  (if (not (string-match-p "\\[" cand))
+      ;; This protects against notmuch errors sent to standard output.
+      ""
+    (let ((text (substring cand (+ 2 helm-notmuch-thread-id-length)))
+          (id (substring cand 0 helm-notmuch-thread-id-length))
+          cstart astart alen tstart tags)
+      (with-temp-buffer
+        (insert text)
+        (goto-char (point-min))
 
-      ; Align message counts
-      (search-forward "[")
-      (setq cstart (point))
-      (search-forward "]")
-      (save-excursion
-        (save-restriction
-          (narrow-to-region cstart (point))
-          (goto-char (point-min))
-          (when (re-search-forward "\([0-9]\+\)" nil t)
-            (replace-match ""))))
-      (forward-char)
-      (just-one-space (- helm-notmuch-thread-count-width
-                         (- (point) cstart)))
-      (forward-char)
+        ;; Align message counts
+        (search-forward "[")
+        (setq cstart (point))
+        (search-forward "]")
+        (save-excursion
+          (save-restriction
+            (narrow-to-region cstart (point))
+            (goto-char (point-min))
+            (when (re-search-forward "\([0-9]\+\)" nil t)
+              (replace-match ""))))
+        (forward-char)
+        (just-one-space (- helm-notmuch-thread-count-width
+                           (- (point) cstart)))
+        (forward-char)
 
-      ; Align (and truncate) authors
-      (setq astart (point))
-      (search-forward ";")
-      (delete-char -1)
-      (setq alen (- (point) astart))
-      (if (> alen helm-notmuch-author-width)
-          (progn
-            (delete-region (- (point) (- alen
-                                         (- helm-notmuch-author-width 3)))
-                           (point))
-            (insert "..."))
-        (just-one-space (- (+ helm-notmuch-author-width 1) alen)))
+        ;; Align (and truncate) authors
+        (setq astart (point))
+        (search-forward ";")
+        (delete-char -1)
+        (setq alen (- (point) astart))
+        (if (> alen helm-notmuch-author-width)
+            (progn
+              (delete-region (- (point) (- alen
+                                           (- helm-notmuch-author-width 3)))
+                             (point))
+              (insert "..."))
+          (just-one-space (- (+ helm-notmuch-author-width 1) alen)))
 
-      ; Colour tags
-      (goto-char (- (point-max) 1))
-      (save-excursion
-        (search-backward "(")
-        (setq tstart (+ (point) 1)))
-      (setq tags (split-string (buffer-substring tstart (point))))
-      (delete-region tstart (point))
-      (insert (notmuch-tag-format-tags tags tags))
+        ;; Colour tags
+        (goto-char (- (point-max) 1))
+        (save-excursion
+          (search-backward "(")
+          (setq tstart (+ (point) 1)))
+        (setq tags (split-string (buffer-substring tstart (point))))
+        (delete-region tstart (point))
+        (insert (notmuch-tag-format-tags tags tags))
 
-      ; Colour the whole line according to tags
-      (notmuch-search-color-line (point-min) (point-max) tags)
-      (setq text (buffer-string)))
-    (cons text id)))
+        ;; Colour the whole line according to tags
+        (notmuch-search-color-line (point-min) (point-max) tags)
+        (setq text (buffer-string)))
+      (cons text id))))
 
 (defun helm-notmuch-maybe-match-incomplete (pattern)
   (if helm-notmuch-match-incomplete-words
