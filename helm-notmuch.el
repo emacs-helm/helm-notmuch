@@ -39,7 +39,7 @@
 (defgroup helm-notmuch nil
   "Helm interface for notmuch."
   :group 'notmuch
-  :link '(url-link :tag "Homepage" "https://github.com/xuchunyang/helm-notmuch"))
+  :link '(url-link :tag "Homepage" "https://github.com/emacs-helm/helm-notmuch"))
 
 (defcustom helm-notmuch-max-matches 0
   "Maximum number of matches shown.
