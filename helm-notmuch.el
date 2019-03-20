@@ -48,7 +48,7 @@ Notice that a setting of 0 means \"Show all matches\"."
   :type '(choice (const :tag "Show all matches" 0)
                  (integer :tag "Maximum number of matches shown" 50)))
 
-(defcustom helm-notmuch-match-incomplete-words nil
+(defcustom helm-notmuch-match-incomplete-words t
   "If non-nil, treat last word in query as incomplete.
 
 If this variable is non-nil, include results with words for which
