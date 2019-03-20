@@ -153,9 +153,13 @@ slows down searches."
 
 (defun helm-notmuch-maybe-match-incomplete (pattern)
   (if helm-notmuch-match-incomplete-words
-      (if (string-match-p "[[:alnum:]]$" pattern)
-          (concat pattern "*")
-        pattern)
+      (mapconcat #'identity
+                 (mapcar (lambda (term)
+                           (if (string-match-p "^[[:alnum:]]+$" term)
+                               (concat term "*")
+                             term))
+                         (split-string pattern))
+                 " ")
     pattern))
 
 (defun helm-notmuch-show (_candidate &optional other-window)
