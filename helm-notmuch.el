@@ -34,6 +34,7 @@
 ;;; Code:
 
 (require 'helm)
+(require 'helm-utils)
 (require 'notmuch)
 
 (defgroup helm-notmuch nil
