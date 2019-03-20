@@ -155,7 +155,7 @@ slows down searches."
         pattern)
     pattern))
 
-(defun helm-notmuch-show (_candidate)
+(defun helm-notmuch-show (_candidate &optional other-window)
   "Display marked candidates using `notmuch-show', retaining the query context."
   (helm-window-show-buffers
    (save-window-excursion
@@ -163,7 +163,13 @@ slows down searches."
               collect (progn (notmuch-show candidate nil nil
                                            (helm-notmuch-maybe-match-incomplete
                                             helm-pattern))
-                             (current-buffer))))))
+                             (current-buffer))))
+   other-window))
+
+(defun helm-notmuch-show-other-window (_candidate)
+  "Display marked candidates using `notmuch-show' in other window.
+See `helm-notmuch-show'."
+  (helm-notmuch-show nil 'other-window))
 
 (defun helm-notmuch-search (candidate)
   "Display notmuch query in notmuch-search buffer, highlighting CANDIDATE."
@@ -180,6 +186,7 @@ slows down searches."
     :pattern-transformer #'helm-notmuch-maybe-match-incomplete
     :nohighlight t
     :action '(("Show message in notmuch" . helm-notmuch-show)
+              ("Show message in notmuch in other window" . helm-notmuch-show-other-window)
               ("Open notmuch-search query buffer" . helm-notmuch-search))))
 
 ;;;###autoload
